@@ -1,0 +1,107 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    }
+
+body {
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+    /* Gambar full layar */
+body img {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(70%);
+    z-index: -1;
+}
+
+    /* Container agar login box di tengah */
+.container {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    /* Box login */
+.login-box {
+    width: 400px;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    text-align: center;
+}
+
+    /* Judul */
+.login-box h2 {
+    margin-bottom: 30px;
+    color: #222;
+    font-size: 32px;
+}
+
+    /* Form */
+#loginForm {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+    /* Input */
+#loginForm input {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: 0.3s;
+}
+
+    #loginForm input:focus {
+    border-color: #28a745;
+    box-shadow: 0 0 8px rgba(40, 167, 69, 0.3);
+    }
+
+    /* Tombol */
+    #loginForm button {
+    padding: 15px;
+    background-color: #28a745;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
+    transition: 0.3s;
+    }
+
+    #loginForm button:hover {
+    background-color: #218838;
+    }
+
+    /* Pesan */
+    #pesan {
+    margin-top: 15px;
+    font-size: 14px;
+    color: red;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+    .login-box {
+        width: 90%;
+        padding: 30px;
+    }
+
+    .login-box h2 {
+        font-size: 26px;
+    }
+    }
