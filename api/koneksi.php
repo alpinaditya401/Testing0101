@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 $host = 'gateway01.ap-southeast-1.prod.alicloud.tidbcloud.com';
 $port = 4000;
 $user = '4SAcQGX7jXvf57V.root';
@@ -7,8 +10,8 @@ $db   = 'db_panen';
 
 $conn = mysqli_init();
 mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL);
+mysqli_options($conn, MYSQLI_OPT_CONNECT_TIMEOUT, 10);
 
-// Gunakan @ untuk menyembunyikan warning jika ingin handle error sendiri
 $real_connect = @mysqli_real_connect(
     $conn,
     $host,
@@ -21,6 +24,6 @@ $real_connect = @mysqli_real_connect(
 );
 
 if (!$real_connect) {
-    die("Koneksi gagal: " . mysqli_connect_error());
+    die("Koneksi gagal: " . mysqli_connect_error() . " (Error #" . mysqli_connect_errno() . ")");
 }
 ?>
