@@ -418,7 +418,7 @@ $data  = $conn->query("SELECT * FROM tbl_panen ORDER BY id DESC");
             <thead>
                 <tr>
                     <th>No</th><th>Tanggal</th><th>Komoditas</th>
-                    <th>Jumlah</th><th>Lokasi</th><th style="text-align:center">Aksi</th>
+                    <th>Jumlah</th><th style="text-align:center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
