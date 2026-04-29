@@ -33,11 +33,10 @@ if (isset($_POST['simpan_edit'])) {
     $komoditas = $conn->real_escape_string($_POST['komoditas']);
     $jumlah    = (int)$_POST['jumlah'];
     $satuan    = $conn->real_escape_string($_POST['satuan']);
-    $lokasi    = $conn->real_escape_string($_POST['lokasi']);
 
     $conn->query("UPDATE tbl_panen SET 
         tanggal='$tanggal', komoditas='$komoditas', 
-        jumlah='$jumlah', satuan='$satuan', lokasi='$lokasi'
+        jumlah='$jumlah', satuan='$satuan'
         WHERE id=$id");
     header("Location:/api/dashboardadmin.php");
     exit();
@@ -436,7 +435,6 @@ $data  = $conn->query("SELECT * FROM tbl_panen ORDER BY id DESC");
                     <td><?= date('d M Y', strtotime($row['tanggal'])) ?></td>
                     <td><span class="komoditas-badge <?= $cls ?>"><?= htmlspecialchars($row['komoditas']) ?></span></td>
                     <td class="jumlah-cell"><?= htmlspecialchars($row['jumlah']).' '.htmlspecialchars($row['satuan']) ?></td>
-                    <td><span class="lokasi-tag"><?= htmlspecialchars($row['lokasi'] ?? '-') ?></span></td>
                     <td>
                         <div class="btn-group">
                             <!-- Tombol Edit — buka modal lewat JS -->
@@ -446,8 +444,7 @@ $data  = $conn->query("SELECT * FROM tbl_panen ORDER BY id DESC");
                                     '<?= $row['tanggal'] ?>',
                                     '<?= addslashes($row['komoditas']) ?>',
                                     <?= $row['jumlah'] ?>,
-                                    '<?= addslashes($row['satuan']) ?>',
-                                    '<?= addslashes($row['lokasi'] ?? '') ?>'
+                                    '<?= addslashes($row['satuan']) ?>'
                                 )">Edit</button>
                             <!-- Tombol Hapus — buka konfirmasi -->
                             <button class="btn btn-hapus"
@@ -466,7 +463,7 @@ $data  = $conn->query("SELECT * FROM tbl_panen ORDER BY id DESC");
 <div class="modal-overlay" id="modalEdit">
     <div class="modal-box">
         <div class="modal-title">✏️ Edit Data Panen</div>
-        <form method="POST">
+        <form method="POST" action="/api/dashboardadmin.php">
             <input type="hidden" name="id" id="editId">
 
             <div class="form-group">
@@ -493,11 +490,9 @@ $data  = $conn->query("SELECT * FROM tbl_panen ORDER BY id DESC");
                 </div>
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Jumlah</label>
-                    <input type="number" name="jumlah" id="editJumlah" required min="1">
-                </div>
+            <div class="form-group">
+                <label>Jumlah</label>
+                <input type="number" name="jumlah" id="editJumlah" required min="1">
             </div>
 
             <div class="modal-actions">
@@ -523,7 +518,7 @@ $data  = $conn->query("SELECT * FROM tbl_panen ORDER BY id DESC");
 
 <script>
 // ── MODAL EDIT ──
-function bukaEdit(id, tanggal, komoditas, jumlah, satuan, lokasi) {
+function bukaEdit(id, tanggal, komoditas, jumlah, satuan) {
     document.getElementById('editId').value       = id;
     document.getElementById('editTanggal').value  = tanggal;
     document.getElementById('editJumlah').value   = jumlah;
@@ -535,10 +530,6 @@ function bukaEdit(id, tanggal, komoditas, jumlah, satuan, lokasi) {
     // Set select satuan
     const selSat = document.getElementById('editSatuan');
     for (let o of selSat.options) o.selected = (o.value === satuan);
-
-    // Set select lokasi
-    const selLok = document.getElementById('editLokasi');
-    for (let o of selLok.options) o.selected = (o.value === lokasi);
 
     document.getElementById('modalEdit').classList.add('show');
 }
