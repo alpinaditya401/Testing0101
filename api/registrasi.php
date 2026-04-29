@@ -8,18 +8,20 @@
 </head>
 
 <body>
-<img src="/Cover.jpg">
+<img src="/Cover.jpg" alt="Background">
 <div class="container">
     <div class="login-box">
         <h2>Register Sistem Panen</h2>
 
         <?php if (isset($_GET['error'])): ?>
             <?php if ($_GET['error'] == '1'): ?>
-                <p style="color:red; text-align:center;">Registrasi gagal: <?= htmlspecialchars($_GET['msg'] ?? '') ?></p>
+                <p style="color:red; text-align:center; margin-bottom:15px;">
+                    Registrasi gagal: <?= htmlspecialchars($_GET['msg'] ?? 'Error tidak diketahui') ?>
+                </p>
             <?php elseif ($_GET['error'] == '2'): ?>
-                <p style="color:red; text-align:center;">Semua field harus diisi.</p>
+                <p style="color:red; text-align:center; margin-bottom:15px;">Semua field harus diisi.</p>
             <?php elseif ($_GET['error'] == '3'): ?>
-                <p style="color:red; text-align:center;">Username sudah digunakan, coba username lain.</p>
+                <p style="color:red; text-align:center; margin-bottom:15px;">Username sudah digunakan, coba username lain.</p>
             <?php endif; ?>
         <?php endif; ?>
 
@@ -29,6 +31,7 @@
             <input type="password" id="password" name="password" placeholder="Password" required>
             <button type="submit">Register</button>
         </form>
+
         <div class="footer">
             Sudah punya akun? <a href="/api/login.php">Masuk sekarang</a>
         </div>
@@ -49,10 +52,8 @@ form.addEventListener("submit", function(e) {
         e.preventDefault();
         pesan.style.color = "red";
         pesan.innerText = "Semua field harus diisi!";
-        return;
     }
 });
 </script>
-
 </body>
 </html>

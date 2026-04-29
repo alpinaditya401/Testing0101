@@ -3,7 +3,7 @@
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
-    }
+}
 
 body {
     height: 100vh;
@@ -11,7 +11,6 @@ body {
     position: relative;
 }
 
-    /* Gambar full layar */
 body img {
     position: fixed;
     top: 0;
@@ -23,7 +22,6 @@ body img {
     z-index: -1;
 }
 
-    /* Container agar login box di tengah */
 .container {
     width: 100%;
     height: 100vh;
@@ -32,7 +30,6 @@ body img {
     align-items: center;
 }
 
-    /* Box login */
 .login-box {
     width: 400px;
     background: rgba(255, 255, 255, 0.95);
@@ -42,37 +39,39 @@ body img {
     text-align: center;
 }
 
-    /* Judul */
 .login-box h2 {
     margin-bottom: 30px;
     color: #222;
     font-size: 32px;
 }
 
-    /* Form */
-#loginForm {
+/* Styling untuk SEMUA form (login & register) */
+#loginForm,
+#registerForm {
     display: flex;
     flex-direction: column;
     gap: 18px;
 }
 
-    /* Input */
-#loginForm input {
+#loginForm input,
+#registerForm input {
     padding: 15px;
     border: 1px solid #ccc;
     border-radius: 8px;
     font-size: 16px;
     outline: none;
     transition: 0.3s;
+    width: 100%;
 }
 
-    #loginForm input:focus {
+#loginForm input:focus,
+#registerForm input:focus {
     border-color: #28a745;
     box-shadow: 0 0 8px rgba(40, 167, 69, 0.3);
-    }
+}
 
-    /* Tombol */
-    #loginForm button {
+#loginForm button,
+#registerForm button {
     padding: 15px;
     background-color: #28a745;
     border: none;
@@ -81,21 +80,36 @@ body img {
     font-size: 18px;
     cursor: pointer;
     transition: 0.3s;
-    }
+}
 
-    #loginForm button:hover {
+#loginForm button:hover,
+#registerForm button:hover {
     background-color: #218838;
-    }
+}
 
-    /* Pesan */
-    #pesan {
+.footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #555;
+}
+
+.footer a {
+    color: #28a745;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.footer a:hover {
+    text-decoration: underline;
+}
+
+#pesan {
     margin-top: 15px;
     font-size: 14px;
     color: red;
-    }
+}
 
-    /* Responsive */
-    @media (max-width: 768px) {
+@media (max-width: 768px) {
     .login-box {
         width: 90%;
         padding: 30px;
@@ -104,4 +118,4 @@ body img {
     .login-box h2 {
         font-size: 26px;
     }
-    }
+}
