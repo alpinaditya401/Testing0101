@@ -12,18 +12,6 @@
 <div class="container">
     <div class="login-box">
         <h2>Login Sistem Panen</h2>
-
-        <?php if (isset($_GET['success']) && $_GET['success'] == '1'): ?>
-            <p style="color:green; text-align:center;">Registrasi berhasil! Silakan login.</p>
-        <?php endif; ?>
-
-        <?php if (isset($_GET['error'])): ?>
-            <?php if ($_GET['error'] == '1'): ?>
-                <p style="color:red; text-align:center;">Username atau password salah.</p>
-            <?php elseif ($_GET['error'] == '2'): ?>
-                <p style="color:red; text-align:center;">Semua field harus diisi.</p>
-            <?php endif; ?>
-        <?php endif; ?>
         
         <form action="/api/proseslogin.php" method="POST" id="loginForm">
             <input type="text" id="username" name="username" placeholder="Username" required>
@@ -34,7 +22,9 @@
         <div class="footer">
             Belum punya akun? <a href="/api/registrasi.php">Daftar sekarang</a>
         </div>
-        <p id="pesan"></p>
+        <p id="pesan" style="<?= isset($_GET['error']) ? 'color:red' : '' ?>">
+            <?= isset($_GET['error']) ? 'Username atau password salah!' : '' ?>
+        </p>
     </div>
 </div>
 
@@ -46,12 +36,14 @@ form.addEventListener("submit", function(e) {
     let username = document.getElementById("username").value.trim();
     let password = document.getElementById("password").value.trim();
 
+    // Jika field kosong, cegah submit dan tampilkan pesan
     if (username === "" || password === "") {
-        e.preventDefault();
         pesan.style.color = "red";
         pesan.innerText = "Semua field harus diisi!";
         return;
     }
+
+    // Jika isi lengkap, biarkan form submit normal ke proseslogin.php
 });
 </script>
 

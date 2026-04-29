@@ -1,17 +1,16 @@
 <?php
-session_start();
 include "koneksi.php";
 
-if(!isset($_SESSION['login'])){
-    header("Location: login.php");
+if(!isset($_COOKIE['username'])){
+    header("Location: /api/login.php");
     exit;
 }
 
-$total_data    = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM panen"));
-$total_jumlah  = mysqli_fetch_assoc(mysqli_query($conn, "SELECT SUM(jumlah) as total, satuan FROM panen GROUP BY satuan ORDER BY total DESC LIMIT 1"));
-$top_komoditas = mysqli_fetch_assoc(mysqli_query($conn, "SELECT komoditas, SUM(jumlah) as total FROM panen GROUP BY komoditas ORDER BY total DESC LIMIT 1"));
+$total_data    = mysqli_fetch_assoc(mysqli_query($conn, "SELECT COUNT(*) as total FROM tbl_panen"));
+$total_jumlah  = mysqli_fetch_assoc(mysqli_query($conn, "SELECT SUM(jumlah) as total, satuan FROM tbl_panen GROUP BY satuan ORDER BY total DESC LIMIT 1"));
+$top_komoditas = mysqli_fetch_assoc(mysqli_query($conn, "SELECT komoditas, SUM(jumlah) as total FROM tbl_panen GROUP BY komoditas ORDER BY total DESC LIMIT 1"));
 
-$chart_query = mysqli_query($conn, "SELECT komoditas, SUM(jumlah) as total FROM panen GROUP BY komoditas ORDER BY total DESC");
+$chart_query = mysqli_query($conn, "SELECT komoditas, SUM(jumlah) as total FROM tbl_panen GROUP BY komoditas ORDER BY total DESC");
 $labels = [];
 $data_chart = [];
 while($row = mysqli_fetch_assoc($chart_query)){

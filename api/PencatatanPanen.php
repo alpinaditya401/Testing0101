@@ -1,24 +1,26 @@
 <?php
-session_start();
 include "koneksi.php";
 
-if(!isset($_SESSION['login'])){
-    header("Location: login.php");
+if(!isset($_COOKIE['username'])){
+    header("Location: /api/login.php");
     exit;
 }
 
+$username = $_COOKIE['username'];
+
 // SIMPAN DATA
 if(isset($_POST['simpan'])){
-    $tanggal   = $_POST['tanggal_panen'];
-    $komoditas = $_POST['komoditas_panen'];
-    $jumlah    = $_POST['jumlah_panen'];
-    $satuan    = $_POST['satuan_panen'];
+    $tanggal   = mysqli_real_escape_string($conn, $_POST['tanggal_panen']);
+    $komoditas = mysqli_real_escape_string($conn, $_POST['komoditas_panen']);
+    $jumlah    = (int)$_POST['jumlah_panen'];
+    $satuan    = mysqli_real_escape_string($conn, $_POST['satuan_panen']);
+    $lokasi    = mysqli_real_escape_string($conn, $_POST['lokasi_panen'] ?? '');
 
-    $query = "INSERT INTO panen (tanggal, komoditas, jumlah, satuan) 
-              VALUES ('$tanggal','$komoditas','$jumlah','$satuan')";
+    $query = "INSERT INTO tbl_panen (tanggal, komoditas, jumlah, satuan, lokasi) 
+              VALUES ('$tanggal','$komoditas','$jumlah','$satuan','$lokasi')";
 
     if(mysqli_query($conn, $query)){
-        header("Location: PencatatanPanen.php");
+        header("Location: /api/PencatatanPanen.php");
         exit;
     } else {
         echo "Error: " . mysqli_error($conn);
@@ -27,9 +29,9 @@ if(isset($_POST['simpan'])){
 
 // HAPUS DATA
 if(isset($_GET['hapus'])){
-    $id = $_GET['hapus'];
-    mysqli_query($conn, "DELETE FROM panen WHERE id='$id'");
-    header("Location: PencatatanPanen.php");
+    $id = (int)$_GET['hapus'];
+    mysqli_query($conn, "DELETE FROM tbl_panen WHERE id='$id'");
+    header("Location: /api/PencatatanPanen.php");
     exit;
 }
 ?>
@@ -373,11 +375,12 @@ if(isset($_GET['hapus'])){
 <div class="page-wrapper">
 
     <!-- HEADER -->
+    <!-- HEADER -->
     <div class="site-header">
-        <h1>SISTEM PENCATATAN HASIL PANEN</h1>
-        <p>Kelola data panen Anda dengan mudah dan efisien</p>
-    </div>
-
+    <a href="/api/logout.php" class="logout-btn">⬅ Logout</a>
+    <h1>SISTEM PENCATATAN HASIL PANEN</h1>
+    <p>Kelola data panen Anda dengan mudah dan efisien</p>
+</div>
     <!-- BANNER -->
     <div class="banner-wrap">
         <img src="/BANNER.png" alt="Banner Panen">
@@ -420,6 +423,15 @@ if(isset($_GET['hapus'])){
                 </div>
 
                 <div class="full-width">
+                    <label class="form-label">Lokasi</label>
+                    <select name="lokasi_panen" class="form-control">
+                        <option>Lahan A</option>
+                        <option>Lahan B</option>
+                        <option>Lahan C</option>
+                    </select>
+                </div>
+
+                <div class="full-width">
                     <button type="submit" name="simpan" class="btn-simpan">Simpan Data</button>
                 </div>
 
@@ -444,7 +456,7 @@ if(isset($_GET['hapus'])){
                 <tbody>
                 <?php
                 $no = 1;
-                $tampil = mysqli_query($conn, "SELECT * FROM panen ORDER BY id DESC");
+                $tampil = mysqli_query($conn, "SELECT * FROM tbl_panen ORDER BY id DESC");
 
                 if(mysqli_num_rows($tampil) == 0){
                     echo '<tr><td colspan="4" class="no-data">Belum ada data panen</td></tr>';
@@ -463,8 +475,8 @@ if(isset($_GET['hapus'])){
         </div>
 
         <div class="nav-buttons">
-            <a href="LaporanUmum.php" class="btn-nav btn-nav-green">Dashboard Panen Terbanyak</a>
-            <a href="LaporanPerKomoditas.php" class="btn-nav btn-nav-blue">Laporan Per Komoditas</a>
+            <a href="/api/LaporanUmum.php" class="btn-nav btn-nav-green">Dashboard Panen Terbanyak</a>
+            <a href="/api/LaporanPerKomoditas.php" class="btn-nav btn-nav-blue">Laporan Per Komoditas</a>
         </div>
     </div>
 

@@ -1,21 +1,18 @@
 <?php
-session_start();
+include "koneksi.php";
 
-if (!isset($_SESSION['username'])) {
+if (!isset($_COOKIE['username'])) {
     header("Location: /api/login.php");
     exit();
 }
 
-$conn = new mysqli("localhost", "root", "", "panen_db");
-if ($conn->connect_error) {
-    die("Koneksi gagal: " . $conn->connect_error);
-}
+$username = $_COOKIE['username'];
 
 // ── HAPUS ──
 if (isset($_GET['hapus'])) {
     $id = (int)$_GET['hapus'];
-    $conn->query("DELETE FROM panen WHERE id = $id");
-    header("Location: /api/dashboardadmin.php");
+    $conn->query("DELETE FROM tbl_panen WHERE id = $id");
+    header("Location:/api/dashboardadmin.php");
     exit();
 }
 
@@ -23,7 +20,7 @@ if (isset($_GET['hapus'])) {
 $editData = null;
 if (isset($_GET['edit'])) {
     $id = (int)$_GET['edit'];
-    $res = $conn->query("SELECT * FROM panen WHERE id = $id");
+    $res = $conn->query("SELECT * FROM tbl_panen WHERE id = $id");
     if ($res && $res->num_rows > 0) {
         $editData = $res->fetch_assoc();
     }
@@ -38,18 +35,19 @@ if (isset($_POST['simpan_edit'])) {
     $satuan    = $conn->real_escape_string($_POST['satuan']);
     $lokasi    = $conn->real_escape_string($_POST['lokasi']);
 
-    $conn->query("UPDATE panen SET 
+    $conn->query("UPDATE tbl_panen SET 
         tanggal='$tanggal', komoditas='$komoditas', 
         jumlah='$jumlah', satuan='$satuan', lokasi='$lokasi'
         WHERE id=$id");
-    header("Location: dashboardadmin.php");
+    header("Location:/api/dashboardadmin.php");
     exit();
 }
 
-$user  = $conn->query("SELECT * FROM user")->num_rows;
-$panen = $conn->query("SELECT * FROM panen")->num_rows;
-$data  = $conn->query("SELECT * FROM panen ORDER BY id DESC");
+$user  = $conn->query("SELECT * FROM tbl_user")->num_rows;
+$panen = $conn->query("SELECT * FROM tbl_panen")->num_rows;
+$data  = $conn->query("SELECT * FROM tbl_panen ORDER BY id DESC");
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -370,16 +368,16 @@ $data  = $conn->query("SELECT * FROM panen ORDER BY id DESC");
     </div>
     <nav class="sidebar-nav">
         <div class="nav-label">Menu</div>
-        <a href="dashboardadmin.php"     class="nav-item active"><span class="icon">🏠</span> Dashboard</a>
-        <a href="PencatatanPanen.php"    class="nav-item"><span class="icon">📝</span> Pencatatan Panen</a>
-        <a href="LaporanUmum.php"        class="nav-item"><span class="icon">📊</span> Dashboard Panen</a>
-        <a href="LaporanPerKomoditas.php"class="nav-item"><span class="icon">🌾</span> Laporan Komoditas</a>
+        <a href="/api/dashboardadmin.php"     class="nav-item active"><span class="icon">🏠</span> Dashboard</a>
+        <a href="/api/PencatatanPanen.php"    class="nav-item"><span class="icon">📝</span> Pencatatan Panen</a>
+        <a href="/api/LaporanUmum.php"        class="nav-item"><span class="icon">📊</span> Dashboard Panen</a>
+        <a href="/api/LaporanPerKomoditas.php"class="nav-item"><span class="icon">🌾</span> Laporan Komoditas</a>
     </nav>
     <div class="sidebar-footer">
         <div class="user-pill">
-            <div class="avatar"><?= strtoupper(substr($_SESSION['username'], 0, 1)) ?></div>
+            <div class="avatar"><?= strtoupper(substr($username, 0, 1)) ?></div>
             <div>
-                <div class="name"><?= htmlspecialchars($_SESSION['username']) ?></div>
+                <div class="name"><?= htmlspecialchars($username) ?></div>
                 <div class="role">Administrator</div>
             </div>
         </div>
@@ -394,7 +392,7 @@ $data  = $conn->query("SELECT * FROM panen ORDER BY id DESC");
             <h2>Dashboard</h2>
             <div class="date"><?= date('l, d F Y') ?></div>
         </div>
-        <a href="logout.php" class="logout-btn">⬅ Logout</a>
+        <a href="/api/logout.php" class="logout-btn">⬅ Logout</a>
     </div>
 
     <!-- Stats -->
@@ -420,7 +418,7 @@ $data  = $conn->query("SELECT * FROM panen ORDER BY id DESC");
             <thead>
                 <tr>
                     <th>No</th><th>Tanggal</th><th>Komoditas</th>
-                    <th>Jumlah</th><th>Lokasi</th><th>Aksi</th>
+                    <th>Jumlah</th><th>Lokasi</th><th style="text-align:center">Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -438,7 +436,7 @@ $data  = $conn->query("SELECT * FROM panen ORDER BY id DESC");
                     <td><?= date('d M Y', strtotime($row['tanggal'])) ?></td>
                     <td><span class="komoditas-badge <?= $cls ?>"><?= htmlspecialchars($row['komoditas']) ?></span></td>
                     <td class="jumlah-cell"><?= htmlspecialchars($row['jumlah']).' '.htmlspecialchars($row['satuan']) ?></td>
-                    <td><span class="lokasi-tag"><?= htmlspecialchars($row['lokasi']) ?></span></td>
+                    <td><span class="lokasi-tag"><?= htmlspecialchars($row['lokasi'] ?? '-') ?></span></td>
                     <td>
                         <div class="btn-group">
                             <!-- Tombol Edit — buka modal lewat JS -->
@@ -449,7 +447,7 @@ $data  = $conn->query("SELECT * FROM panen ORDER BY id DESC");
                                     '<?= addslashes($row['komoditas']) ?>',
                                     <?= $row['jumlah'] ?>,
                                     '<?= addslashes($row['satuan']) ?>',
-                                    '<?= addslashes($row['lokasi']) ?>'
+                                    '<?= addslashes($row['lokasi'] ?? '') ?>'
                                 )">Edit</button>
                             <!-- Tombol Hapus — buka konfirmasi -->
                             <button class="btn btn-hapus"

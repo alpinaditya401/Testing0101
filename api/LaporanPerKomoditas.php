@@ -1,7 +1,12 @@
 <?php
 include "koneksi.php";
 
-$data = mysqli_query($conn, "SELECT * FROM panen");
+if(!isset($_COOKIE['username'])){
+    header("Location: /api/login.php");
+    exit;
+}
+
+$data = mysqli_query($conn, "SELECT * FROM tbl_panen");
 $rows = [];
 while($d = mysqli_fetch_assoc($data)){
     $rows[] = $d;
@@ -14,7 +19,7 @@ $grafik = mysqli_query($conn, "
             ELSE jumlah 
         END
     ) as total 
-    FROM panen 
+    FROM tbl_panen 
     GROUP BY komoditas
 ");
 

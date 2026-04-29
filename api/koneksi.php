@@ -2,16 +2,13 @@
 $host = 'gateway01.ap-southeast-1.prod.alicloud.tidbcloud.com';
 $port = 4000;
 $user = '4SAcQGX7jXvf57V.root';
-$pass = 'BeEFAGBjqkuT6bps';
+$pass = 'IIGRkIjPmovOfDu4';
 $db   = 'db_panen';
 
 $conn = mysqli_init();
-if (!$conn) {
-    die("mysqli_init() gagal.");
-}
-
 mysqli_ssl_set($conn, NULL, NULL, NULL, NULL, NULL);
 
+// Gunakan @ untuk menyembunyikan warning jika ingin handle error sendiri
 $real_connect = @mysqli_real_connect(
     $conn,
     $host,
@@ -23,9 +20,7 @@ $real_connect = @mysqli_real_connect(
     MYSQLI_CLIENT_SSL
 );
 
-if (!$real_connect || mysqli_connect_errno()) {
-    die("Koneksi database gagal: " . mysqli_connect_error() . " (errno: " . mysqli_connect_errno() . ")");
+if (!$real_connect) {
+    die("Koneksi gagal: " . mysqli_connect_error());
 }
-
-$conn->set_charset("utf8mb4");
 ?>
