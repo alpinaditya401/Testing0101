@@ -499,6 +499,7 @@ $data  = $conn->query("SELECT * FROM tbl_panen ORDER BY id DESC");
                     <input type="number" name="jumlah" id="editJumlah" required min="1">
                 </div>
             </div>
+
             <div class="modal-actions">
                 <button type="button" class="btn-cancel" onclick="tutupEdit()">Batal</button>
                 <button type="submit" name="simpan_edit" class="btn-save">Simpan Perubahan</button>
