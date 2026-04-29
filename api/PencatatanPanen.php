@@ -7,6 +7,7 @@ if(!isset($_COOKIE['username'])){
 }
 
 $username = $_COOKIE['username'];
+$role     = $_COOKIE['role'] ?? 'user';
 
 // SIMPAN DATA
 if(isset($_POST['simpan'])){
@@ -375,12 +376,16 @@ if(isset($_GET['hapus'])){
 <div class="page-wrapper">
 
     <!-- HEADER -->
-    <!-- HEADER -->
     <div class="site-header">
-    <a href="/api/logout.php" class="logout-btn">⬅ Logout</a>
-    <h1>SISTEM PENCATATAN HASIL PANEN</h1>
-    <p>Kelola data panen Anda dengan mudah dan efisien</p>
-</div>
+        <?php if ($role === 'admin'): ?>
+            <a href="/api/dashboardadmin.php" class="logout-btn">🏠 Beranda</a>
+        <?php else: ?>
+            <a href="/api/logout.php" class="logout-btn">⬅ Logout</a>
+        <?php endif; ?>
+        <h1>SISTEM PENCATATAN HASIL PANEN</h1>
+        <p>Kelola data panen Anda dengan mudah dan efisien</p>
+    </div>
+
     <!-- BANNER -->
     <div class="banner-wrap">
         <img src="/BANNER.png" alt="Banner Panen">
