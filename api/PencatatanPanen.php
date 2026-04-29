@@ -423,15 +423,6 @@ if(isset($_GET['hapus'])){
                 </div>
 
                 <div class="full-width">
-                    <label class="form-label">Lokasi</label>
-                    <select name="lokasi_panen" class="form-control">
-                        <option>Lahan A</option>
-                        <option>Lahan B</option>
-                        <option>Lahan C</option>
-                    </select>
-                </div>
-
-                <div class="full-width">
                     <button type="submit" name="simpan" class="btn-simpan">Simpan Data</button>
                 </div>
 
